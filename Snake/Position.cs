@@ -10,13 +10,14 @@
         public int x1;
         public int x2;
         public int y { get; set; }
-        public int vMargin { get; set; }
-        public int wMargin { get; set; }
-        
-        private const ConsoleColor GREEN = ConsoleColor.Green;
+
+        private const ConsoleColor D_GREEN = ConsoleColor.DarkGreen;
         private const ConsoleColor BLACK = ConsoleColor.Black;
-        
+        private const ConsoleColor GREEN = ConsoleColor.Green;
+
         public bool snakeKiller { get; }
+        public bool snake { get; set; }
+        public bool head { get; set; }
 
         public Position(int x1, int x2, int y, bool snakeKiller)
         {
@@ -25,12 +26,43 @@
             this.y = y;
             this.snakeKiller = snakeKiller;
         }
+        
+        public Position(int x1, int x2, int y, bool snakeKiller, int vertMargin, int horMargin)
+        {
+            this.x1 = x1 + horMargin;
+            this.x2 = x2 + horMargin;
+            this.y = y + vertMargin;
+            this.snakeKiller = snakeKiller;
+        }
+        
+        public Position(int x1, int x2, int y, bool snake, bool head, int vertMargin, int horMargin)
+        {
+            this.x1 = x1 + horMargin;
+            this.x2 = x2 + horMargin;
+            this.y = y + vertMargin;
+            this.snake = snake;
+            this.head = head;
+            this.snakeKiller = snakeKiller;
+        }
 
         public void Draw() {
             Console.SetCursorPosition(x1, y);
-            if(snakeKiller)
+            if (snake)
             {
-                Console.BackgroundColor = GREEN;
+                if (head)
+                {
+                    Console.BackgroundColor = ConsoleColor.White;
+                }
+                else
+                {
+                    Console.BackgroundColor = GREEN;
+                }
+                Console.Write("  ");
+                Console.BackgroundColor = BLACK;
+            } 
+            else if(snakeKiller)
+            {
+                Console.BackgroundColor = D_GREEN;
                 Console.Write("  ");
                 Console.BackgroundColor = BLACK;
             }

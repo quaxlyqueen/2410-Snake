@@ -102,10 +102,11 @@ void input()
                         Console.WriteLine("Invalid level entered.");
                         break;
                 }
+                DrawGameBoard(grid);
+
                 if (grid != null)
                 {
-                    DrawGameBoard(grid);
-                    Position p = new Position(15, 15, 0, false);
+                    //Position p = new Position(15, 15, 0, false);
                     //Snake s = new Snake.Snake(10, grid, p);
                     Console.BackgroundColor = ConsoleColor.Black;
 
@@ -144,9 +145,13 @@ static Position[][] GenerateGameBoard(Position[][] grid, double chance)
         for (int x = 0; x < grid.Length; x++)
         {
             if (x == 0 || x == grid[y].Length - 1 || y == 0 || y == grid.Length - 1 || new Random().NextDouble() <= chance)
-                grid[y][x] = new Position(xCounter++, xCounter++, y, true);
+            {
+                grid[y][x] = new Position(xCounter++, xCounter++, y, true, 10, 30);
+            }
             else
-                grid[y][x] = new Position(xCounter++, xCounter++, y, false);
+            {
+                grid[y][x] = new Position(xCounter++, xCounter++, y, false, 10, 30);
+            }
         }
         xCounter = 0;
     }
@@ -157,9 +162,14 @@ void DrawGameBoard(Position[][] grid)
 {
     Console.WriteLine();
     for (int i = 0; i < grid.Length; i++)
+    {
         for (int j = 0; j < grid[i].Length; j++)
-                grid[i][j].Draw();
-            Console.WriteLine();
+        {
+            grid[i][j].Draw();
+        }
+
+        Console.WriteLine();
+    }
 }
 
 static void Rules()
