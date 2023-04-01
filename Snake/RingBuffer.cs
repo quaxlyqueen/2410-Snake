@@ -54,7 +54,7 @@ namespace Snake
             Node curr = head;
             while(curr != null)
             {
-                Console.SetCursorPosition(curr.p.X + 26, curr.p.Y + 16);
+                //Console.SetCursorPosition(curr.p.X + 26, curr.p.Y + 16);
                 Console.Write("  ");
                 Console.BackgroundColor = ConsoleColor.White;
                 curr = curr.prev;
