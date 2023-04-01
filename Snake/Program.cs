@@ -1,73 +1,79 @@
-﻿using Snake;
+﻿namespace Snake;
 
 public class Program
 {
-    int leftMargin = 30;
-    int topMargin = 5;
+    int leftMargin = 9;
+    int topMargin = 0;
+    private int height = 19;
+    private int width = 31;
+    private Position[][] grid;
+    private Position bottom { get; set; }
+    private Position top { get; set; }
+
+
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello World");
-
         Program p = new Program();
+          p.bottom = new Position(p.leftMargin, p.leftMargin + 1, p.topMargin + p.height);
+          p.top = new Position(p.leftMargin, p.leftMargin + 1, p.topMargin);
         p.PrintIntro();
+        p.MenuInput();
+        p.PrintSnake();
+    }
+
+    void PrintSnake()
+    {
+        Snake s = new Snake(new Position(bottom.X1, bottom.X2, bottom.Y + 5, false, 1), grid, 5);
+        for (int i = 0; i < 50; i++)
+        {
+            s.Move(0);
+            Thread.Sleep(100);
+        }
     }
 
     void PrintIntro()
     {
         string[] s =
         {
-            " WELCOME TO THE SNAKE GAME ",
-            "╔═════════════════════════════════════════════════════════════╗",
-            "                /^\\/^\\                                       ",
-            "              _|__|  O|                                        ",
-            "     \\/     /~      \\_/ \\                                   ",
-            "      \\____|__________/  \\                                   ",
-            "             \\_______      \\                                 ",
-            "                     '\\     \\                 \\             ",
-            "                       |     |                   \\            ",
-            "                      /      /                    \\           ",
-            "                    /     /                       \\\\         ",
-            "                    /     /                       \\\\         ",
-            "                  /     /                         \\  \\\\     ",
-            "                /     /             _----_         \\   \\\\   ",
-            "              /     /           _-~      ~-_         |   |     ",
-            "             (      (    _-~    _--_    ~-_     _/   |         ",
-            "             \\      ~-____-~    _-~   ~-_    ~-_-~    /       ",
-            "              ~-_           _-~          ~-_       _-~         ",
-            "                 ~--______-~                ~-___-~            ",
-            "╚═════════════════════════════════════════════════════════════╝"
+            "╔════════════════════════════════════════════════════════════╗",
+            "               /^\\/^\\                                       ",
+            "             _|__|  O|                                        ",
+            "    \\/     /~      \\_/ \\                                   ",
+            "     \\____|__________/  \\                                   ",
+            "            \\_______      \\                                 ",
+            "                    '\\     \\                 \\             ",
+            "                      |     |                   \\            ",
+            "                     /      /                    \\           ",
+            "                   /     /                       \\\\         ",
+            "                   /     /                       \\\\         ",
+            "                 /     /                         \\  \\\\     ",
+            "               /     /             _----_         \\   \\\\   ",
+            "             /     /           _-~      ~-_         |   |     ",
+            "            (      (    _-~    _--_    ~-_     _/   |         ",
+            "            \\      ~-____-~    _-~   ~-_    ~-_-~    /       ",
+            "             ~-_           _-~          ~-_       _-~         ",
+            "                ~--______-~                ~-___-~            ",
+            "╚════════════════════════════════════════════════════════════╝"
         };
-
-        for (int i = 0; i < s.Length; i++)
-        {
-            Console.WriteLine();
-            Console.CursorLeft = leftMargin;
-            Console.CursorTop = topMargin++;
-        }
+        PrintConsole(s);
     }
 
-    void PrintConsole()
+    void MenuInput()
     {
-
-        input();
-        Console.ResetColor();
-    }
-
-    void input()
-    {
-        Console.WriteLine("Enter p to play, q to quit, r for rules");
+        Console.SetCursorPosition(bottom.X1, bottom.Y);
+        Console.Write("Enter p to play, q to quit, r for rules:                     ");
         char input = Console.ReadKey().KeyChar;
+        Console.SetCursorPosition(bottom.X1, bottom.Y);
+        Console.WriteLine("");
         while (input != 'q')
         {
             switch (input)
             {
                 case 'p':
-                    Console.Clear(); // clear the console
-                    int gridleftMargin = 30;
-                    Console.CursorLeft = gridleftMargin;
-                    Console.WriteLine("Enter e for easy, m for medium, and h for hard");
+                    Console.SetCursorPosition(bottom.X1, bottom.Y);
+                    Console.Write("Enter e for easy, m for medium, and h for hard:              ");
                     char level = Console.ReadKey().KeyChar;
-                    Position[][] grid = new Position[20][];
+                    grid = new Position[height][];
                     switch (level)
                     {
                         case 'e':
@@ -80,199 +86,90 @@ public class Program
                             grid = GenerateGameBoard(grid, 0.1);
                             break;
                         default:
-                            Console.WriteLine("Invalid level entered.");
+                            grid = GenerateGameBoard(grid, 0.1);
                             break;
                     }
-
+                    Console.SetCursorPosition(top.X1, top.Y);
                     DrawGameBoard(grid);
-                    /*
-                    if (grid != null)
-                    {
-                        //Position p = new Position(15, 15, 0, false);
-                        //Snake s = new Snake.Snake(10, grid, p);
-                        Console.BackgroundColor = ConsoleColor.Black;
-
-                        for(int i = 0; i < (grid.Length * 2) - 2; i++)
-                        {
-                            //s.move(0);
-                            Thread.Sleep(600);
-                        }
-                    }
-                    */
                     break;
                 case 'q':
                     Environment.Exit(0);
                     break;
                 case 'r':
-                    Rules();
-                    // Code to execute to see Rules
-                    break;
-                // Add as many cases as you need
-                default:
-                    // Code to execute if variable doesn't match any of the cases
+                    DisplayRules();
                     break;
             }
 
-            Console.WriteLine();
-            Console.CursorLeft = 30;
-            Console.WriteLine("Enter p to play, q to quit, r for rules");
+            Console.SetCursorPosition(bottom.X1, bottom.Y);
+            Console.Write("Enter p to play, q to quit, r for rules:                     ");
             input = Console.ReadKey().KeyChar;
         }
     }
 
-    Position[][] GenerateGameBoard(Position[][] grid, double chance)
-    {
-        int xCounter = 0;
-        for (int y = 0; y < grid.Length; y++)
-        {
-            grid[y] = new Position[20];
-            for (int x = 0; x < grid.Length; x++)
-            {
-                if (x == 0 || x == grid[y].Length - 1 || y == 0 || y == grid.Length - 1 ||
-                    new Random().NextDouble() <= chance)
-                {
-                    grid[y][x] = new Position(xCounter++, xCounter++, y, true);
-                }
-                else
-                {
-                    grid[y][x] = new Position(xCounter++, xCounter++, y, false);
-                }
-            }
-
-            xCounter = 0;
-        }
-
-        return grid;
-    }
-
     void DrawGameBoard(Position[][] grid)
     {
-        Console.WriteLine();
         for (int i = 0; i < grid.Length; i++)
         {
             for (int j = 0; j < grid[i].Length; j++)
             {
+                Console.SetCursorPosition(grid[i][j].X1, grid[i][j].Y);
                 grid[i][j].Draw();
             }
-
             Console.WriteLine();
         }
     }
 
-    static void Rules()
+    void DisplayRules()
     {
-        Console.Clear();
-        Console.WriteLine();
+        Position[][] grid = new Position[height][];
+            grid = GenerateGameBoard(grid, 0.03);
+            DrawGameBoard(grid);
+            
+        string rules = (
+            "RULES:\n" +
+            "           - Do not let the snake head touch walls or obstacles.\n" +
+            "           - Use the arrow keys to control the snake."
+            //"    - Collect all points in a level to move to the next level.",
+            //"    - Levels increase difficulty."
+        );
+        PrintConsole(rules);
+    }
 
-        int gridleftMargin = 30;
-        int width = 61;
-        int height = 60;
-        int snakeLength = 5;
-        int obstacle = 10;
+    void PrintConsole(string message)
+    {
+        Console.SetCursorPosition(bottom.X1, bottom.Y + 1);
+        Console.WriteLine(message);
+    }
 
-        int[,] grid = new int[width, height];
-
-        int x = (width - snakeLength) / 2;
-        int y = height / 2;
-
-        for (int i = 0; i < snakeLength; i++)
+    void PrintConsole(string[] s)
+    {
+        for (int i = 0; i < s.Length; i++)
         {
-            if (i == 0)
-            {
-                grid[x + i, y] = 2;
-            }
-
-            else
-                grid[x + i, y] = 1;
+            Console.SetCursorPosition(top.X1, top.Y + i);
+            Console.WriteLine(s[i]);
         }
-
-        Random random = new Random();
-        for (int i = 0; i < obstacle; i++)
+    }
+    
+    private Position[][] GenerateGameBoard(Position[][] grid, double chance)
+    {
+        int xCounter = 0;
+        for (int y = 0; y < grid.Length; y++)
         {
-            int a = random.Next(1, width - 1);
-            int b = random.Next(1, height - 1);
-            if (grid[a, b] == 0)
+            grid[y] = new Position[width];
+            for (int x = 0; x < grid[y].Length; x++)
             {
-                grid[a, b] = 3;
-            }
-            else
-            {
-                i--;
-            }
-        }
-
-        Console.CursorLeft = gridleftMargin;
-        for (int j = 0; j < height; j++)
-        {
-            Console.CursorLeft = gridleftMargin;
-            for (int i = 0; i < width; i++)
-            {
-
-                if (i == 0 || i == width - 1)
+                if (x == 0 || x == grid[y].Length - 1 || y == 0 || y == grid.Length - 1 ||
+                    new Random().NextDouble() <= chance)
                 {
-                    Console.Write("||");
-                }
-                else if (j == 0 || j == height - 1)
-                {
-                    Console.Write("=");
-                }
-
-                else if (grid[i, j] == 0)
-                {
-                    Console.Write(" ");
-                }
-
-                else if (grid[i, j] == 1)
-                {
-                    Console.BackgroundColor = ConsoleColor.Green;
-                    Console.Write("           ");
-                    i += 10;
-                    Console.BackgroundColor = ConsoleColor.Black;
-                }
-                else if (grid[i, j] == 2)
-                {
-                    Console.BackgroundColor = ConsoleColor.Red;
-                    Console.ForegroundColor = ConsoleColor.Black;
-                    Console.Write("< ");
-                    i += 1;
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.BackgroundColor = ConsoleColor.Black;
-
-                }
-
-                else if (grid[i, j] == 4)
-                {
-                    Console.BackgroundColor = ConsoleColor.Yellow;
-                    Console.Write(" ");
-                    Console.BackgroundColor = ConsoleColor.Black;
+                    grid[y][x] = new Position(xCounter++ + leftMargin, xCounter++ + leftMargin, y + topMargin, true);
                 }
                 else
                 {
-                    Console.BackgroundColor = ConsoleColor.Yellow;
-                    Console.Write(" ");
-                    Console.BackgroundColor = ConsoleColor.Black;
-
-                    if (i < width - 14)
-                    {
-                        Console.Write("<--- obstacle");
-                        i += 13;
-                    }
-
+                    grid[y][x] = new Position(xCounter++ + leftMargin, xCounter++ + leftMargin, y + topMargin, false);
                 }
             }
-
-
-            Console.WriteLine();
+            xCounter = 0;
         }
-
-        Console.CursorLeft = gridleftMargin;
-        Console.WriteLine("The rules of the game is to not let the head of the sanke \n");
-        Console.CursorLeft = gridleftMargin;
-        Console.WriteLine("represented as ( < ) hit the walls or any obstcles. You will \n");
-        Console.CursorLeft = gridleftMargin;
-        Console.WriteLine("use the arrow keys on your keyboard to control the snake. \n");
-        Console.CursorLeft = gridleftMargin;
-        Console.WriteLine("you will also colletc points for how long you can stay alive");
-
+        return grid;
     }
 }

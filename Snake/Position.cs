@@ -7,67 +7,66 @@
     ///
     public class Position
     {
-        public int x1;
-        public int x2;
-        public int y { get; set; }
+        public int X1;
+        public int X2;
+        public int Y { get; }
 
         private const ConsoleColor D_GREEN = ConsoleColor.DarkGreen;
         private const ConsoleColor BLACK = ConsoleColor.Black;
         private const ConsoleColor GREEN = ConsoleColor.Green;
+        private const ConsoleColor WHITE = ConsoleColor.White;
 
-        public bool snakeKiller { get; }
-        public bool snake { get; set; }
-        public bool head { get; set; }
+
+        public bool SnakeKiller { get; }
+        public int SnakeHead { get; set; }
+        public Position Next { get; set; }
+        public Position Prev { get; set; }
+
+        public Position(int x1, int x2, int y)
+        {
+            X1 = x1;
+            X2 = x2;
+            Y = y;
+        }
 
         public Position(int x1, int x2, int y, bool snakeKiller)
         {
-            this.x1 = x1;
-            this.x2 = x2;
-            this.y = y;
-            this.snakeKiller = snakeKiller;
+            X1 = x1;
+            X2 = x2;
+            Y = y;
+            SnakeKiller = snakeKiller;
+            SnakeHead = -1;
         }
         
-        public Position(int x1, int x2, int y, bool snakeKiller, int vertMargin, int horMargin)
+        public Position(int x1, int x2, int y, bool snakeKiller, int snakeHead)
         {
-            this.x1 = x1 + horMargin;
-            this.x2 = x2 + horMargin;
-            this.y = y + vertMargin;
-            this.snakeKiller = snakeKiller;
-        }
-        
-        public Position(int x1, int x2, int y, bool snake, bool head, int vertMargin, int horMargin)
-        {
-            this.x1 = x1 + horMargin;
-            this.x2 = x2 + horMargin;
-            this.y = y + vertMargin;
-            this.snake = snake;
-            this.head = head;
-            this.snakeKiller = snakeKiller;
+            X1 = x1;
+            X2 = x2;
+            Y = y;
+            SnakeKiller = snakeKiller;
+            SnakeHead = snakeHead;
         }
 
         public void Draw() {
-            Console.SetCursorPosition(x1, y);
-            /*
-            if (snake)
-            {
-                if (head)
-                {
-                    Console.BackgroundColor = ConsoleColor.White;
-                }
-                else
-                {
-                    Console.BackgroundColor = GREEN;
-                }
-                Console.Write("  ");
-                Console.BackgroundColor = BLACK;
-            } 
-            else */if(snakeKiller)
+            if(SnakeKiller)
             {
                 Console.BackgroundColor = D_GREEN;
                 Console.Write("  ");
                 Console.BackgroundColor = BLACK;
+            } 
+            else if (SnakeHead == 1)
+            {
+                Console.BackgroundColor = WHITE;
+                Console.Write("  ");
+                Console.BackgroundColor = BLACK;
+            } 
+            else if (SnakeHead == 0)
+            {
+                Console.BackgroundColor = GREEN;
+                Console.Write("  ");
+                Console.BackgroundColor = BLACK;
             }
-            else
+            else if(SnakeHead == -1)
             {
                 Console.Write("  ");
             }
