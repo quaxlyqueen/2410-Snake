@@ -1,7 +1,6 @@
 ﻿using Snake;
 
 PrintConsole();
-//private Position[][] grida;
 
 void PrintConsole()
 {
@@ -103,7 +102,7 @@ void input()
                         break;
                 }
                 DrawGameBoard(grid);
-
+                /*
                 if (grid != null)
                 {
                     //Position p = new Position(15, 15, 0, false);
@@ -116,6 +115,7 @@ void input()
                         Thread.Sleep(600);
                     }
                 }
+                */
                 break;
             case 'q':
                 Environment.Exit(0);
@@ -136,7 +136,7 @@ void input()
     }
 }
 
-static Position[][] GenerateGameBoard(Position[][] grid, double chance)
+Position[][] GenerateGameBoard(Position[][] grid, double chance)
 {
     int xCounter = 0;
     for (int y = 0; y < grid.Length; y++)
@@ -146,11 +146,11 @@ static Position[][] GenerateGameBoard(Position[][] grid, double chance)
         {
             if (x == 0 || x == grid[y].Length - 1 || y == 0 || y == grid.Length - 1 || new Random().NextDouble() <= chance)
             {
-                grid[y][x] = new Position(xCounter++, xCounter++, y, true, 10, 30);
+                grid[y][x] = new Position(xCounter++, xCounter++, y, true);
             }
             else
             {
-                grid[y][x] = new Position(xCounter++, xCounter++, y, false, 10, 30);
+                grid[y][x] = new Position(xCounter++, xCounter++, y, false);
             }
         }
         xCounter = 0;

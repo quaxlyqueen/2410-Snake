@@ -47,6 +47,7 @@
 
         public void Draw() {
             Console.SetCursorPosition(x1, y);
+            /*
             if (snake)
             {
                 if (head)
@@ -60,7 +61,7 @@
                 Console.Write("  ");
                 Console.BackgroundColor = BLACK;
             } 
-            else if(snakeKiller)
+            else */if(snakeKiller)
             {
                 Console.BackgroundColor = D_GREEN;
                 Console.Write("  ");
