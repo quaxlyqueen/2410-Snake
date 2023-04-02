@@ -5,81 +5,74 @@ namespace Snake
     /// </summary>
     public class Snake
     {
-        private Position head;
-        private Position tail;
+        private int n;
         private int capacity;
-        private int size;
         private Position[][] grid;
+        private bool Collided;
 
-        public Snake(Position start, Position[][] grid, int capacity)
+        public Snake(Position[][] grid, int capacity)
         {
             this.grid = grid;
             this.capacity = capacity;
-            head = start;
-            size = 0;
+            n = 0;
+            Collided = false;
         }
 
-        /// <summary>
-        /// Provide a direction for the snake to move towards. Each move checks if the new head slot is an obstacle.
-        /// 0 = right, 1 = up, 2 = left, 3 = down
-        /// </summary>
-        /// <param name="direction"></param>
-        /// <returns>true if nextPosition is a non obstacle.</returns>
-        public bool Move(int direction)
+        public bool Move()
         {
-            Position p = null;
-            switch (direction)
+            Console.ForegroundColor = ConsoleColor.Black;
+            int x = 1;
+            int y = grid.Length / 2;
+            int direction = 0;
+
+            while (!Collided && x < grid[0].Length - 1 && y < grid.Length - 1 && x > 0 && y > 0)
             {
-                case 1: // move up
-                    p = new Position(head.X1 + 2, head.X2 + 2, head.Y + 0, false, 1);
-                    break;
-                case 2: // move left
-                    p = new Position(head.X1 + 0, head.X2 + 0, head.Y + 0, false, 1);
-                    break;
-                case 3: // move down
-                    p = new Position(head.X1 + 0, head.X2 + 0, head.Y + 0, false, 1);
-                    break;
-                default: // move right
-                    p = new Position(head.X1 + 2, head.X2 + 2, head.Y + 0, false, 1);
-                    break;
+                if (Console.KeyAvailable)
+                {
+                    char d = Console.ReadKey().KeyChar;
+                    switch (d)
+                    {
+                        case 'w':
+                            direction = 1;
+                            break;
+                        case 'a':
+                            direction = 2;
+                            break;
+                        case 's':
+                            direction = 3;
+                            break;
+                        case 'd':
+                            direction = 0;
+                            break;
+                    }
+                }
+                Console.SetCursorPosition(grid[y][x].X1, grid[y][x].Y);
+                grid[y][x].Draw(false);
+                switch (direction)
+                {
+                    case 0: // move right
+                        x++;
+                        grid[y][x].Snake = true;
+                        break;
+                    case 1: // move up
+                        y--;
+                        grid[y][x].Snake = true;
+                        break;
+                    case 2: // move left
+                        x--;
+                        grid[y][x].Snake = true;
+                        break;
+                    case 3: // move down
+                        y++;
+                        grid[y][x].Snake = true;
+                        break;
+                }
+                Console.SetCursorPosition(grid[y][x].X1, grid[y][x].Y);
+                grid[y][x].Draw(false);
+                Thread.Sleep(200);
             }
-
-            if (p != null)
-            {
-                //remove();
-                add(p);
-                draw();
-                return true;
-            }
-            return false;
-        }
-
-        public void draw() {
-            Position current = head;
-            while (current != null)
-            {
-                Console.SetCursorPosition(current.X1, current.Y);
-                current.Draw();
-                current = current.Next;
-            }
-        }
-        
-        // TODO: Need to implement.
-        private void add(Position p)
-        {
-            if (size == capacity)
-                throw new OutOfMemoryException("Must remove an snake segment first.");
-
-            head.Next = p;
-            head.Next.Prev = head;
-            head = p;
-            head.Prev.SnakeHead = 0;
-        }
-
-        // TODO: Need to implement.
-        private void remove()
-        {
-
+            Console.ForegroundColor = ConsoleColor.White;
+            return true;
         }
     }
 }

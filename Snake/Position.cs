@@ -18,7 +18,7 @@
 
 
         public bool SnakeKiller { get; }
-        public int SnakeHead { get; set; }
+        public bool Snake { get; set; }
         public Position Next { get; set; }
         public Position Prev { get; set; }
 
@@ -35,38 +35,21 @@
             X2 = x2;
             Y = y;
             SnakeKiller = snakeKiller;
-            SnakeHead = -1;
-        }
-        
-        public Position(int x1, int x2, int y, bool snakeKiller, int snakeHead)
-        {
-            X1 = x1;
-            X2 = x2;
-            Y = y;
-            SnakeKiller = snakeKiller;
-            SnakeHead = snakeHead;
         }
 
-        public void Draw() {
+        public void Draw(bool isHead) {
             if(SnakeKiller)
             {
                 Console.BackgroundColor = D_GREEN;
                 Console.Write("  ");
                 Console.BackgroundColor = BLACK;
-            } 
-            else if (SnakeHead == 1)
+            } else if (Snake)
             {
                 Console.BackgroundColor = WHITE;
                 Console.Write("  ");
                 Console.BackgroundColor = BLACK;
-            } 
-            else if (SnakeHead == 0)
-            {
-                Console.BackgroundColor = GREEN;
-                Console.Write("  ");
-                Console.BackgroundColor = BLACK;
             }
-            else if(SnakeHead == -1)
+            else
             {
                 Console.Write("  ");
             }

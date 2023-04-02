@@ -18,17 +18,12 @@ public class Program
           p.top = new Position(p.leftMargin, p.leftMargin + 1, p.topMargin);
         p.PrintIntro();
         p.MenuInput();
-        p.PrintSnake();
     }
 
     void PrintSnake()
     {
-        Snake s = new Snake(new Position(bottom.X1, bottom.X2, bottom.Y + 5, false, 1), grid, 5);
-        for (int i = 0; i < 50; i++)
-        {
-            s.Move(0);
-            Thread.Sleep(100);
-        }
+        Snake s = new Snake(grid, 100);
+        s.Move();
     }
 
     void PrintIntro()
@@ -99,10 +94,6 @@ public class Program
                     DisplayRules();
                     break;
             }
-
-            Console.SetCursorPosition(bottom.X1, bottom.Y);
-            Console.Write("Enter p to play, q to quit, r for rules:                     ");
-            input = Console.ReadKey().KeyChar;
         }
     }
 
@@ -113,10 +104,11 @@ public class Program
             for (int j = 0; j < grid[i].Length; j++)
             {
                 Console.SetCursorPosition(grid[i][j].X1, grid[i][j].Y);
-                grid[i][j].Draw();
+                grid[i][j].Draw(false);
             }
             Console.WriteLine();
         }
+        PrintSnake();
     }
 
     void DisplayRules()
