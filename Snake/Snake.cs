@@ -5,6 +5,7 @@ namespace Snake
     /// </summary>
     public class Snake
     {
+        private Queue<Position> body;
         private int n;
         private int capacity;
         private Position[][] grid;
@@ -16,6 +17,7 @@ namespace Snake
             this.capacity = capacity;
             n = 0;
             Collided = false;
+            body = new Queue<Position>();
         }
 
         public bool Move()
@@ -52,24 +54,27 @@ namespace Snake
                 {
                     case 0: // move right
                         x++;
-                        grid[y][x].Snake = true;
                         break;
                     case 1: // move up
                         y--;
-                        grid[y][x].Snake = true;
                         break;
                     case 2: // move left
                         x--;
-                        grid[y][x].Snake = true;
                         break;
                     case 3: // move down
                         y++;
-                        grid[y][x].Snake = true;
                         break;
                 }
-                Console.SetCursorPosition(grid[y][x].X1, grid[y][x].Y);
-                grid[y][x].Draw(false);
-                Thread.Sleep(200);
+                if (grid[y][x].SnakeKiller)
+                {
+                    Console.SetCursorPosition(grid[0][0].X1, grid[grid.Length - 1][0].Y + 1);
+                    Console.ForegroundColor = ConsoleColor.White;
+                    return false;
+                }
+                body.Enqueue(grid[y][x]);
+                body.Dequeue();
+                grid[y][x].Snake = true;
+                Thread.Sleep(150);
             }
             Console.ForegroundColor = ConsoleColor.White;
             return true;

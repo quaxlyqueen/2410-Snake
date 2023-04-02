@@ -15,6 +15,7 @@
         private const ConsoleColor BLACK = ConsoleColor.Black;
         private const ConsoleColor GREEN = ConsoleColor.Green;
         private const ConsoleColor WHITE = ConsoleColor.White;
+        private const ConsoleColor YELLOW = ConsoleColor.Yellow;
 
 
         public bool SnakeKiller { get; }
@@ -46,6 +47,11 @@
             } else if (Snake)
             {
                 Console.BackgroundColor = WHITE;
+                Console.Write("  ");
+                Console.BackgroundColor = BLACK;
+            } else if (isHead)
+            {
+                Console.BackgroundColor = GREEN;
                 Console.Write("  ");
                 Console.BackgroundColor = BLACK;
             }

@@ -1,4 +1,8 @@
-﻿namespace Snake;
+﻿using System.ComponentModel;
+using System.Timers;
+using Timer = System.Timers.Timer;
+
+namespace Snake;
 
 public class Program
 {
@@ -6,6 +10,8 @@ public class Program
     int topMargin = 0;
     private int height = 19;
     private int width = 31;
+    private double difficulty;
+    private int time;
     private Position[][] grid;
     private Position bottom { get; set; }
     private Position top { get; set; }
@@ -16,14 +22,33 @@ public class Program
         Program p = new Program();
           p.bottom = new Position(p.leftMargin, p.leftMargin + 1, p.topMargin + p.height);
           p.top = new Position(p.leftMargin, p.leftMargin + 1, p.topMargin);
+          p.time = 0;
         p.PrintIntro();
         p.MenuInput();
     }
 
-    void PrintSnake()
+    void DrawSnake()
     {
         Snake s = new Snake(grid, 100);
-        s.Move();
+        Timer t = new Timer(100);
+        t.Elapsed += TimerAction;
+        t.Enabled = true;
+        if (!s.Move())
+        {
+            DisplayGameOver();
+            Thread.Sleep(3000);
+            PrintIntro();
+            MenuInput();
+        }
+        else
+        {
+            DisplayNextLevel();
+        }
+    }
+
+    void TimerAction(object? sender, ElapsedEventArgs elapsedEventArgs)
+    {
+        time++;
     }
 
     void PrintIntro()
@@ -53,13 +78,13 @@ public class Program
         PrintConsole(s);
     }
 
+    // TODO: Can no longer press q or r after starting the game.
     void MenuInput()
     {
         Console.SetCursorPosition(bottom.X1, bottom.Y);
         Console.Write("Enter p to play, q to quit, r for rules:                     ");
         char input = Console.ReadKey().KeyChar;
         Console.SetCursorPosition(bottom.X1, bottom.Y);
-        Console.WriteLine("");
         while (input != 'q')
         {
             switch (input)
@@ -80,12 +105,9 @@ public class Program
                         case 'h':
                             grid = GenerateGameBoard(grid, 0.1);
                             break;
-                        default:
-                            grid = GenerateGameBoard(grid, 0.1);
-                            break;
                     }
-                    Console.SetCursorPosition(top.X1, top.Y);
                     DrawGameBoard(grid);
+                    DrawSnake();
                     break;
                 case 'q':
                     Environment.Exit(0);
@@ -108,7 +130,7 @@ public class Program
             }
             Console.WriteLine();
         }
-        PrintSnake();
+        time = 0;
     }
 
     void DisplayRules()
@@ -127,6 +149,44 @@ public class Program
         PrintConsole(rules);
     }
 
+    // TODO: ASCII art for game over screen
+    void DisplayGameOver()
+    {
+        string[] s =
+        {
+            "╔═════════════════════════GAME OVER══════════════════════════╗",
+            "               /^\\/^\\                                       ",
+            "             _|__|  O|                                        ",
+            "    \\/     /~      \\_/ \\                                   ",
+            "     \\____|__________/  \\                                   ",
+            "            \\_______      \\                                 ",
+            "                    '\\     \\                 \\             ",
+            "                      |     |                   \\            ",
+            "                     /      /                    \\           ",
+            "                   /     /                       \\\\         ",
+            "                   /     /                       \\\\         ",
+            "                 /     /                         \\  \\\\     ",
+            "               /     /             _----_         \\   \\\\   ",
+            "             /     /           _-~      ~-_         |   |     ",
+            "            (      (    _-~    _--_    ~-_     _/   |         ",
+            "            \\      ~-____-~    _-~   ~-_    ~-_-~    /       ",
+            "             ~-_           _-~          ~-_       _-~         ",
+            "                ~--______-~                ~-___-~            ",
+            "╚════════════════════════GAME OVER═══════════════════════════╝"
+        };
+        // Prints score and time below ASCII art of same dimension as the snake drawing above
+        PrintConsole($"Score: {time * 100} | Time: {time / 10} seconds               ");
+        PrintConsole(s);
+        time = 0;
+    }
+
+    void DisplayNextLevel()
+    {
+        grid = GenerateGameBoard(grid, difficulty * (1 + difficulty));
+        DrawGameBoard(grid);
+        DrawSnake();
+    }
+
     void PrintConsole(string message)
     {
         Console.SetCursorPosition(bottom.X1, bottom.Y + 1);
@@ -135,6 +195,7 @@ public class Program
 
     void PrintConsole(string[] s)
     {
+        Console.BackgroundColor = ConsoleColor.Black;
         for (int i = 0; i < s.Length; i++)
         {
             Console.SetCursorPosition(top.X1, top.Y + i);
