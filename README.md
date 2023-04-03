@@ -1,3 +1,3 @@
 # Snake
 Snake
-CLI snake game. CSIS 2410 project A05.
+CLI snake game in C#. CSIS 2410 project A05.

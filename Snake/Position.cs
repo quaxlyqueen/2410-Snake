@@ -38,27 +38,43 @@
             SnakeKiller = snakeKiller;
         }
 
-        public void Draw(bool isHead) {
-            if(SnakeKiller)
+        public void Draw(bool isHead)
+        {
+            Console.BackgroundColor = BLACK;
+            Console.SetCursorPosition(X1, Y);
+
+            if (SnakeKiller)
             {
                 Console.BackgroundColor = D_GREEN;
                 Console.Write("  ");
                 Console.BackgroundColor = BLACK;
-            } else if (Snake)
-            {
-                Console.BackgroundColor = WHITE;
-                Console.Write("  ");
-                Console.BackgroundColor = BLACK;
-            } else if (isHead)
+            }
+            else if (isHead)
             {
                 Console.BackgroundColor = GREEN;
+                Console.Write("  ");
+                Console.BackgroundColor = BLACK;
+
+                // If the current position was the head in the previous move,
+                // reset its color to yellow (i.e., the color of the body)
+                if (Prev != null && Prev.Snake && Prev != this)
+                {
+                    Prev.Draw(false);
+                }
+            }
+            else if (Snake)
+            {
+                Console.BackgroundColor = YELLOW;
                 Console.Write("  ");
                 Console.BackgroundColor = BLACK;
             }
             else
             {
+                Console.BackgroundColor = BLACK; // fill with black if Snake is false
                 Console.Write("  ");
             }
         }
+
+
     }
 }
